@@ -45,14 +45,16 @@ struct RootView: View {
             .navigationTitle("Recorder")
         } detail: {
             switch selection {
-            case .recordScreen: RecordScreenView()
-            case .recordWebcam: RecordWebcam()
-            case .recordDrawing: RecordDrawing()
-            case .recordVisionAudio: RecordVisionAudio()
-            case .recordVisionVideo: RecordVisionVideo()
-            case .recordNotesFromYouTube: RecordNotesFromYouTube()
-            case .recordPrompt: RecordPromptView()
-            case .none: Text("Select a section")
+                case .recordScreen: RecordScreenView()
+                case .recordWebcam: RecordWebcam()
+                case .recordDrawing: RecordDrawing()
+                case .recordVisionAudio: RecordVisionAudio()
+                case .recordVisionVideo: RecordVisionVideo()
+                case .recordNotesFromYouTube: RecordNotesFromYouTube()
+                case .recordPrompt: RecordPromptView()
+                case .none: Text("Select a section")
+                case .some(.recordVisionHeader): Text("Select a section")
+                case .some(.recordNotesHeader): Text("Select a section")
             }
         }
     }

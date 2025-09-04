@@ -36,8 +36,10 @@ final class AudioRecorder: NSObject, ObservableObject {
             AVNumberOfChannelsKey: 2
         ]
         do {
+            #if os(iOS) || os(tvOS) || os(watchOS)
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
+            #endif
             recorder = try AVAudioRecorder(url: url, settings: settings)
             recorder?.record()
             isRecording = true
@@ -48,6 +50,8 @@ final class AudioRecorder: NSObject, ObservableObject {
         lastFile = recorder?.url
         recorder = nil
         isRecording = false
+        #if os(iOS) || os(tvOS) || os(watchOS)
         try? AVAudioSession.sharedInstance().setActive(false)
+        #endif
     }
 }

@@ -77,7 +77,7 @@ struct NotesListView: View {
     let clip: YouTubeClip
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            ForEach(Array(clip.notes.enumerated()), id: \.__offset) { (_, note) in
+            ForEach(Array(clip.notes.enumerated()), id: \.offset) { _, note in
                 switch note {
                 case .text(let s): Text("📝 " + s)
                 case .audio(let url, let dur): Text("🎙️ Audio \(Int(dur))s → \(url.lastPathComponent)")
