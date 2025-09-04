@@ -3,16 +3,18 @@ import AVFoundation
 
 struct RecordVisionAudio: View {
     @StateObject private var audio = AudioRecorder()
+    @State private var pos: Double = 0
     var body: some View {
-        VStack(spacing: 12) {
-            Text("Audio Recorder (prototype)").font(.headline)
+        VStack(spacing: 16) {
+            RecordingHeader(leadingLabel: "Record Vision", leftMenuTitle: "Mic", rightMenuTitle: "Monitor Off")
+            Card { WaveformPlaceholder().frame(minHeight: 220) }
             HStack {
                 Button(audio.isRecording ? "Stop" : "Record") { audio.toggle() }
                     .buttonStyle(.borderedProminent)
-                if let url = audio.lastFile {
-                    Text("Saved: \(url.lastPathComponent)").font(.footnote)
-                }
+                if let url = audio.lastFile { Text("Saved: \(url.lastPathComponent)").font(.footnote) }
+                Spacer()
             }
+            TransportBar(position: $pos, timeString: "00:00", showLevel: true)
         }
         .padding()
         .navigationTitle("Record Vision Audio")

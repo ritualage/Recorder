@@ -3,18 +3,19 @@ import AVFoundation
 
 struct RecordVisionVideo: View {
     @StateObject private var movie = MovieRecorder()
+    @State private var pos: Double = 0
     var body: some View {
-        VStack(spacing: 12) {
-            CameraPreview(session: movie.session)
-                .frame(minHeight: 300)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+        VStack(spacing: 16) {
+            RecordingHeader(leadingLabel: "Record Vision", leftMenuTitle: "Camera", rightMenuTitle: "Mic")
+            Card { PlayCardPlaceholder() }
+                .frame(minHeight: 260)
             HStack {
                 Button(movie.isRecording ? "Stop" : "Record") { movie.toggle() }
                     .buttonStyle(.borderedProminent)
-                if let url = movie.lastFile {
-                    Text("Saved: \(url.lastPathComponent)").font(.footnote)
-                }
+                if let url = movie.lastFile { Text("Saved: \(url.lastPathComponent)").font(.footnote) }
+                Spacer()
             }
+            TransportBar(position: $pos, timeString: "00:00", showLevel: true)
         }
         .padding()
         .task { await movie.configure() }

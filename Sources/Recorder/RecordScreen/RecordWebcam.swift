@@ -3,17 +3,21 @@ import AVFoundation
 
 struct RecordWebcam: View {
     @StateObject private var camera = CameraController()
+    @State private var pos: Double = 0
     var body: some View {
-        VStack(spacing: 12) {
-            CameraPreview(session: camera.session)
-                .frame(minHeight: 320)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-            HStack {
-                Button(camera.isRunning ? "Stop" : "Start") {
-                    camera.toggleSession()
-                }.buttonStyle(.borderedProminent)
-                Button("Capture") { camera.captureSnapshot() }
+        VStack(spacing: 16) {
+            RecordingHeader(leadingLabel: "Camera", leftMenuTitle: "Camera", rightMenuTitle: "No Microphone")
+            Card {
+                CameraPreview(session: camera.session)
             }
+            .frame(minHeight: 320)
+            HStack(spacing: 12) {
+                Button(camera.isRunning ? "Stop" : "Start") { camera.toggleSession() }
+                    .buttonStyle(.borderedProminent)
+                Button("Capture") { camera.captureSnapshot() }
+                Spacer()
+            }
+            TransportBar(position: $pos, timeString: "0:00", showLevel: true)
         }
         .padding()
         .task { await camera.configure() }

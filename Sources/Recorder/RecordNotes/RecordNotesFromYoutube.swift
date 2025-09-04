@@ -5,35 +5,65 @@ struct RecordNotesFromYouTube: View {
     @State private var urlString: String = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     @State private var videoTitle: String = "The Changing Earth"
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 16) {
+            // Input row
             HStack {
                 TextField("YouTube URL", text: $urlString).textFieldStyle(.roundedBorder)
                 Button("Add Clip") {
                     let id = YouTubeIDParser.videoID(from: urlString) ?? "dQw4w9WgXcQ"
-                    let clip = YouTubeClip(videoID: id, title: videoTitle, start: 30, end: 75, transcript: "Sample transcript for the selected range.", notes: [.text("My text note")])
+                    let clip = YouTubeClip(
+                        videoID: id,
+                        title: videoTitle,
+                        start: 30,
+                        end: 75,
+                        transcript: "Sample transcript for the selected range.",
+                        notes: [.text("Key points on plate tect…"), .audio(url: URL(fileURLWithPath: "/tmp/audio.m4a"), duration: 13), .drawing(image: UIImageOrNSImage())]
+                    )
                     store.clips.append(clip)
                 }.buttonStyle(.borderedProminent)
             }
-            Table(store.clips) {
-                TableColumn("Clip") { clip in
-                    HStack {
-                        YouTubeThumbnailView(videoID: clip.videoID).frame(width: 120, height: 68).clipShape(RoundedRectangle(cornerRadius: 8))
-                        VStack(alignment: .leading) {
-                            Text(clip.title).font(.headline)
+
+            // Headings row
+            HStack {
+                Text("Clip").font(.headline)
+                Spacer()
+                Text("Transcript").font(.headline)
+                Spacer()
+                Text("My Notes").font(.headline)
+            }
+            .overlay(Divider(), alignment: .bottom)
+
+            // Rows
+            ForEach(store.clips) { clip in
+                HStack(alignment: .top, spacing: 16) {
+                    // Column 1: Clip
+                    HStack(alignment: .top, spacing: 12) {
+                        YouTubeThumbnailView(videoID: clip.videoID)
+                            .frame(width: 120, height: 68)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(clip.title).font(.title3.weight(.semibold))
                             Text(timeRange(clip)).font(.caption).foregroundStyle(.secondary)
                         }
                     }
+                    .frame(minWidth: 260, alignment: .leading)
+
+                    // Column 2: Transcript
+                    Text(clip.transcript)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    // Column 3: Notes
+                    VStack(alignment: .leading, spacing: 8) {
+                        NotesListView(clip: clip)
+                    }
+                    .frame(minWidth: 260, alignment: .leading)
                 }
-                TableColumn("Transcript") { clip in
-                    Text(clip.transcript).font(.body)
-                }
-                TableColumn("My Notes") { clip in
-                    NotesListView(clip: clip)
-                }
+                .padding(.vertical, 8)
+                .overlay(Divider(), alignment: .bottom)
             }
         }
         .padding()
-        .navigationTitle("Record Notes From YouTube")
+        .navigationTitle("Record Notes")
     }
     func timeRange(_ c: YouTubeClip) -> String {
         func fmt(_ t: TimeInterval) -> String {

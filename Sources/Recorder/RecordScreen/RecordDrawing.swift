@@ -2,19 +2,37 @@ import SwiftUI
 
 struct RecordDrawing: View {
     #if os(iOS)
-    var body: some View { PencilKitCanvasView().navigationTitle("Record Drawing") }
+    @State private var pos: Double = 0
+    var body: some View {
+        VStack(spacing: 16) {
+            RecordingHeader(leadingLabel: "Record Drawing")
+            Card { PencilKitCanvasView() }.frame(minHeight: 300)
+            TransportBar(position: $pos, timeString: "0:00")
+        }
+        .padding()
+        .navigationTitle("Record Drawing")
+    }
     #else
     @State private var points: [CGPoint] = []
+    @State private var pos: Double = 0
     var body: some View {
-        Canvas { ctx, size in
-            var path = Path()
-            if let first = points.first {
-                path.move(to: first)
-                for p in points.dropFirst() { path.addLine(to: p) }
+        VStack(spacing: 16) {
+            RecordingHeader(leadingLabel: "Record Drawing")
+            Card {
+                Canvas { ctx, size in
+                    var path = Path()
+                    if let first = points.first {
+                        path.move(to: first)
+                        for p in points.dropFirst() { path.addLine(to: p) }
+                    }
+                    ctx.stroke(path, with: .color(.primary), lineWidth: 3)
+                }
+                .gesture(DragGesture(minimumDistance: 0).onChanged { points.append($0.location) })
             }
-            ctx.stroke(path, with: .color(.primary), lineWidth: 2)
+            .frame(minHeight: 300)
+            TransportBar(position: $pos, timeString: "0:00")
         }
-        .gesture(DragGesture(minimumDistance: 0).onChanged { points.append($0.location) })
+        .padding()
         .navigationTitle("Record Drawing")
     }
     #endif
