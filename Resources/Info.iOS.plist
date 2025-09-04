@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key><string>Recorder</string>
+    <key>UILaunchScreen</key><dict/></dict>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UIRequiresFullScreen</key><true/>
+    <key>NSCameraUsageDescription</key>
+    <string>Camera is used to record webcam clips.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Microphone is used to record audio.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Save your recordings to Photos.</string>
+</dict>
+</plist>
