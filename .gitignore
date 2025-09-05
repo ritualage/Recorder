@@ -5,7 +5,7 @@ Secrets.plist
 *.hmap
 
 # If you're using XcodeGen, commit project.yml but ignore the generated .xcodeproj
-*.xcodeproj
+#*.xcodeproj
 
 ## App packaging
 *.ipa

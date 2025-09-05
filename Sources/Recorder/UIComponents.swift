@@ -60,6 +60,7 @@ struct TransportBar: View {
     @Binding var position: Double
     var timeString: String
     var showLevel: Bool = false
+    var meterLevel: Double? = nil
     @State private var level: Double = 0
     var body: some View {
         VStack(spacing: 8) {
@@ -67,7 +68,7 @@ struct TransportBar: View {
                 Text(timeString).monospacedDigit()
                 Slider(value: $position, in: 0...1)
                 if showLevel {
-                    LevelMeter(level: level)
+                    LevelMeter(level: meterLevel ?? level)
                         .frame(width: 40)
                 }
             }
@@ -128,4 +129,3 @@ struct PlayCardPlaceholder: View {
         }
     }
 }
-
